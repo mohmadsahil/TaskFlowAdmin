@@ -1,11 +1,6 @@
 import { Sidebar } from "@/components/Sidebar";
 import { Header } from "@/components/Header";
-import { useProject } from "@/hooks/use-projects";
-import { useTasks, useUpdateTask } from "@/hooks/use-tasks";
-import { useWorkflows } from "@/hooks/use-workflows";
-import { useRoute } from "wouter";
 import { TaskCard } from "@/components/TaskCard";
-import { CreateTaskDialog } from "@/components/CreateTaskDialog";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Plus, LayoutGrid, List } from "lucide-react";
 import { Link } from "wouter";
@@ -20,35 +15,47 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+
+// Static Data
+const STATIC_PROJECT = {
+  id: 1,
+  name: "SaaS Platform Redesign",
+  workflowId: 1
+};
+
+const STATIC_TASKS = [
+  { id: 1, title: "Design System Updates", status: "Manager", priority: "High", dueDate: "2026-01-20" },
+  { id: 2, title: "Backend API Integration", status: "Developer", priority: "Medium", dueDate: "2026-01-22" },
+  { id: 3, title: "Unit Testing", status: "Tester", priority: "Low", dueDate: "2026-01-25" },
+  { id: 4, title: "User Authentication", status: "Developer", priority: "High", dueDate: "2026-01-21" },
+];
+
+const STATIC_WORKFLOW = {
+  id: 1,
+  name: "Software Dev",
+  steps: ["Manager", "Developer", "Tester", "Deployed"]
+};
 
 export default function ProjectBoard() {
-  const [, params] = useRoute("/projects/:id/board");
-  const projectId = Number(params?.id);
   const [view, setView] = useState<"board" | "list">("board");
-  
-  const { data: project } = useProject(projectId);
-  const { data: tasks } = useTasks(projectId);
-  const { data: workflows } = useWorkflows();
-  const updateTask = useUpdateTask();
+  const [tasks, setTasks] = useState(STATIC_TASKS);
 
-  const workflow = workflows?.find(w => w.id === project?.workflowId) || { steps: ["To Do", "In Progress", "Done"] };
-  const steps = workflow.steps as string[];
+  const steps = STATIC_WORKFLOW.steps;
 
   const handleDragStart = (e: React.DragEvent, taskId: number) => {
     e.dataTransfer.setData("taskId", taskId.toString());
   };
 
-  const handleDrop = async (e: React.DragEvent, status: string) => {
+  const handleDrop = (e: React.DragEvent, status: string) => {
     e.preventDefault();
     const taskId = Number(e.dataTransfer.getData("taskId"));
     if (taskId) {
-      await updateTask.mutateAsync({ id: taskId, status });
+      setTasks(prev => prev.map(t => t.id === taskId ? { ...t, status } : t));
     }
   };
 
   const handleDragOver = (e: React.DragEvent) => e.preventDefault();
-
-  if (!project) return <div>Loading...</div>;
 
   return (
     <div className="min-h-screen bg-background flex overflow-hidden">
@@ -63,25 +70,25 @@ export default function ProjectBoard() {
                 <ArrowLeft className="w-5 h-5" />
               </Link>
               <div>
-                <h1 className="text-2xl font-bold text-foreground">{project.name}</h1>
-                <p className="text-sm text-muted-foreground mt-0.5">Workflow: {workflow.name || "Default"}</p>
+                <h1 className="text-2xl font-bold text-foreground">{STATIC_PROJECT.name}</h1>
+                <p className="text-sm text-muted-foreground mt-0.5">Workflow: {STATIC_WORKFLOW.name}</p>
               </div>
             </div>
             
             <div className="flex items-center gap-3 bg-secondary/50 p-1 rounded-xl border border-border/50">
               <Button 
-                variant={view === "board" ? "white" : "ghost"} 
+                variant={view === "board" ? "default" : "ghost"} 
                 size="sm" 
-                className={cn("rounded-lg gap-2 px-3", view === "board" && "shadow-sm border border-border/50")}
+                className="rounded-lg gap-2 px-3"
                 onClick={() => setView("board")}
               >
                 <LayoutGrid className="w-4 h-4" />
                 Board
               </Button>
               <Button 
-                variant={view === "list" ? "white" : "ghost"} 
+                variant={view === "list" ? "default" : "ghost"} 
                 size="sm" 
-                className={cn("rounded-lg gap-2 px-3", view === "list" && "shadow-sm border border-border/50")}
+                className="rounded-lg gap-2 px-3"
                 onClick={() => setView("list")}
               >
                 <List className="w-4 h-4" />
@@ -91,7 +98,9 @@ export default function ProjectBoard() {
           </div>
           
           <div className="flex justify-end">
-            <CreateTaskDialog projectId={projectId} />
+            <Button className="bg-primary hover:bg-primary/90 text-white rounded-xl gap-2">
+              <Plus className="w-4 h-4" /> New Task
+            </Button>
           </div>
         </header>
 
@@ -99,7 +108,7 @@ export default function ProjectBoard() {
           {view === "board" ? (
             <div className="flex gap-6 h-full min-w-max">
               {steps.map((step) => {
-                const columnTasks = tasks?.filter(t => t.status === step) || [];
+                const columnTasks = tasks.filter(t => t.status === step);
                 
                 return (
                   <div 
@@ -115,15 +124,9 @@ export default function ProjectBoard() {
                           {columnTasks.length}
                         </Badge>
                       </div>
-                      <CreateTaskDialog 
-                        projectId={projectId} 
-                        defaultStatus={step}
-                        trigger={
-                          <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-primary/5">
-                            <Plus className="w-4 h-4" />
-                          </Button>
-                        }
-                      />
+                      <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-primary/5">
+                        <Plus className="w-4 h-4" />
+                      </Button>
                     </div>
 
                     <div className="flex-1 overflow-y-auto p-3 space-y-3 custom-scrollbar">
@@ -134,7 +137,7 @@ export default function ProjectBoard() {
                             draggable
                             onDragStart={(e) => handleDragStart(e, task.id)}
                           >
-                            <TaskCard task={task} />
+                            <TaskCard task={task as any} />
                           </div>
                         ))}
                       </AnimatePresence>
@@ -161,7 +164,7 @@ export default function ProjectBoard() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {tasks?.map((task) => (
+                  {tasks.map((task) => (
                     <TableRow key={task.id} className="hover:bg-primary/5 transition-colors">
                       <TableCell className="font-medium py-4">{task.title}</TableCell>
                       <TableCell>
@@ -170,12 +173,11 @@ export default function ProjectBoard() {
                         </Badge>
                       </TableCell>
                       <TableCell>
-                        <Badge className={cn(
-                          "border",
+                        <Badge className={`border ${
                           task.priority === "High" ? "bg-red-50 text-red-700 border-red-200" :
                           task.priority === "Medium" ? "bg-orange-50 text-orange-700 border-orange-200" :
                           "bg-green-50 text-green-700 border-green-200"
-                        )}>
+                        }`}>
                           {task.priority}
                         </Badge>
                       </TableCell>
