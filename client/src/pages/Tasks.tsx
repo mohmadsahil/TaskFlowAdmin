@@ -2,6 +2,7 @@ import { Sidebar } from "@/components/Sidebar";
 import { Header } from "@/components/Header";
 import { TaskCard } from "@/components/TaskCard";
 import { Button } from "@/components/ui/button";
+import { CreateTaskModal } from "@/components/CreateTaskModal";
 import { 
   Plus, 
   LayoutGrid, 
@@ -81,9 +82,16 @@ export default function Tasks() {
                 <h1 className="text-3xl font-bold text-foreground">Tasks</h1>
                 <p className="text-muted-foreground mt-1 font-medium">Track and manage your individual tasks</p>
               </div>
-              <Button className="rounded-xl gap-2 h-11 px-6 font-bold shadow-lg shadow-primary/20">
-                <Plus className="w-5 h-5" /> Create Task
-              </Button>
+              <CreateTaskModal 
+                trigger={
+                  <Button className="rounded-xl gap-2 h-11 px-6 font-bold shadow-lg shadow-primary/20">
+                    <Plus className="w-5 h-5" /> Create Task
+                  </Button>
+                }
+                onSuccess={(newTask) => {
+                  setTasks(prev => [...prev, { ...newTask, id: prev.length + 1 }]);
+                }}
+              />
             </div>
 
             <div className="flex flex-col md:flex-row gap-4 justify-between items-center bg-white p-3 rounded-2xl border border-border/50 shadow-sm">

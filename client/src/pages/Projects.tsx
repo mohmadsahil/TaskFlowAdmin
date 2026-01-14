@@ -3,6 +3,7 @@ import { Header } from "@/components/Header";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { CreateProjectModal } from "@/components/CreateProjectModal";
 import { Link } from "wouter";
 import { 
   Folder, 
@@ -53,7 +54,9 @@ export default function Projects() {
               <h1 className="text-3xl font-bold text-foreground">Projects</h1>
               <p className="text-muted-foreground mt-1 font-medium">Manage and track your team's workspace</p>
             </div>
-            <Button className="rounded-xl h-11 px-6 font-bold shadow-lg shadow-primary/20">Create Project</Button>
+            <CreateProjectModal 
+              trigger={<Button className="rounded-xl h-11 px-6 font-bold shadow-lg shadow-primary/20">Create Project</Button>}
+            />
           </div>
 
           <div className="flex flex-col md:flex-row gap-4 justify-between items-center bg-white p-3 rounded-2xl border border-border/50 shadow-sm mb-8">
