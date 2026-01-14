@@ -5,7 +5,9 @@ import {
   GitMerge, 
   Settings, 
   LogOut,
-  Layers
+  Layers,
+  ShieldCheck,
+  Bell
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -14,6 +16,8 @@ const NAV_ITEMS = [
   { label: "Projects", href: "/projects", icon: Briefcase },
   { label: "Workflows", href: "/workflows", icon: GitMerge },
   { label: "Tasks", href: "/tasks", icon: Layers },
+  { label: "Roles", href: "/roles", icon: ShieldCheck },
+  { label: "Notifications", href: "/notifications", icon: Bell },
   { label: "Settings", href: "/settings", icon: Settings },
 ];
 
