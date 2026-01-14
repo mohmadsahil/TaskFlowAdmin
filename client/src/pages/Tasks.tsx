@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils";
 import { TaskCard } from "@/components/TaskCard";
 import { Button } from "@/components/ui/button";
 import { CreateTaskModal } from "@/components/CreateTaskModal";
@@ -29,11 +30,12 @@ import {
 
 // Static Data
 const STATIC_TASKS = [
-  { id: 1, title: "Design System Updates", status: "In Progress", priority: "High", dueDate: "2026-01-20", category: "Design" },
-  { id: 2, title: "Backend API Integration", status: "Todo", priority: "Medium", dueDate: "2026-01-22", category: "Dev" },
-  { id: 3, title: "Unit Testing", status: "Review", priority: "Low", dueDate: "2026-01-25", category: "QA" },
-  { id: 4, title: "User Authentication", status: "Done", priority: "High", dueDate: "2026-01-21", category: "Dev" },
-  { id: 5, title: "Mobile UI Mockups", status: "In Progress", priority: "Medium", dueDate: "2026-01-28", category: "Design" },
+  { id: 1, title: "Design System Updates", status: "In Progress", priority: "High", dueDate: "2026-01-20", category: "Design", description: "Review and update all component tokens for accessibility." },
+  { id: 2, title: "Backend API Integration", status: "Todo", priority: "Medium", dueDate: "2026-01-22", category: "Dev", description: "Connect frontend authentication flows to the new REST endpoints." },
+  { id: 3, title: "Unit Testing", status: "Review", priority: "Low", dueDate: "2026-01-25", category: "QA", description: "Achieve 80% coverage for the core business logic." },
+  { id: 4, title: "User Authentication", status: "Done", priority: "High", dueDate: "2026-01-21", category: "Dev", description: "Implement secure login with JWT and refresh tokens." },
+  { id: 5, title: "Mobile UI Mockups", status: "In Progress", priority: "Medium", dueDate: "2026-01-28", category: "Design", description: "Create high-fidelity wireframes for the mobile dashboard view." },
+  { id: 6, title: "Performance Audit", status: "Todo", priority: "High", dueDate: "2026-02-05", category: "QA", description: "Identify bottlenecks in the dashboard data loading." },
 ];
 
 const COLUMNS = ["Todo", "In Progress", "Review", "Done"];
@@ -65,17 +67,17 @@ export default function Tasks() {
   const handleDragOver = (e: React.DragEvent) => e.preventDefault();
 
   return (
-    <div className="p-4 md:p-8 flex flex-col h-full overflow-hidden">
-      <header className="mb-6">
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+    <div className="p-3 md:p-5 flex flex-col h-full overflow-hidden">
+      <header className="mb-4">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-4">
           <div>
-            <h1 className="text-2xl md:text-3xl font-bold text-foreground">Tasks</h1>
-            <p className="text-sm md:text-base text-muted-foreground font-medium">Track and manage your individual tasks</p>
+            <h1 className="text-xl md:text-2xl font-bold text-foreground tracking-tight">Tasks</h1>
+            <p className="text-[11px] md:text-xs text-muted-foreground font-medium">Manage and monitor team workload efficiently.</p>
           </div>
           <CreateTaskModal 
             trigger={
-              <Button className="w-full sm:w-auto rounded-xl gap-2 h-11 px-6 font-bold shadow-lg shadow-primary/20">
-                <Plus className="w-5 h-5" /> Create Task
+              <Button className="w-full sm:w-auto rounded-lg gap-1.5 h-9 px-4 text-xs font-bold shadow-sm">
+                <Plus className="w-4 h-4" /> New Task
               </Button>
             }
             onSuccess={(newTask) => {
@@ -84,48 +86,48 @@ export default function Tasks() {
           />
         </div>
 
-        <div className="flex flex-col lg:flex-row gap-4 justify-between items-stretch bg-white p-3 rounded-2xl border border-border/50 shadow-sm">
+        <div className="flex flex-col lg:flex-row gap-2 justify-between items-stretch bg-white p-2 rounded-xl border border-border/40 shadow-sm">
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground" />
             <input 
               type="text" 
-              placeholder="Search tasks..." 
+              placeholder="Filter tasks..." 
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full bg-secondary/30 border-none rounded-xl py-2.5 pl-10 pr-4 text-sm focus:ring-2 focus:ring-primary/20 outline-none transition-all"
+              className="w-full bg-secondary/20 border-none rounded-lg py-2 pl-9 pr-3 text-xs focus:ring-1 focus:ring-primary/20 outline-none transition-all"
             />
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="flex-1 sm:flex-none rounded-xl gap-2 font-bold h-10 border-border/50">
-                  <Filter className="w-4 h-4" /> {filter === "All" ? "All Priorities" : filter}
+                <Button variant="outline" className="flex-1 sm:flex-none rounded-lg gap-1.5 font-bold h-8 text-[11px] border-border/40 px-3">
+                  <Filter className="w-3.5 h-3.5" /> {filter === "All" ? "Priority" : filter}
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent className="rounded-xl">
+              <DropdownMenuContent className="rounded-lg">
                 {["All", "High", "Medium", "Low"].map(p => (
-                  <DropdownMenuItem key={p} onClick={() => setFilter(p)} className="rounded-lg">{p}</DropdownMenuItem>
+                  <DropdownMenuItem key={p} onClick={() => setFilter(p)} className="text-xs rounded-md">{p}</DropdownMenuItem>
                 ))}
               </DropdownMenuContent>
             </DropdownMenu>
 
-            <div className="flex bg-secondary/50 p-1 rounded-xl border border-border/50">
+            <div className="flex bg-secondary/30 p-0.5 rounded-lg border border-border/30">
               <Button 
                 variant={view === "board" ? "default" : "ghost"} 
                 size="sm" 
-                className="rounded-lg gap-2 px-3 h-8 font-bold"
+                className="rounded-md gap-1.5 px-2.5 h-7 text-[10px] font-bold"
                 onClick={() => setView("board")}
               >
-                <LayoutGrid className="w-4 h-4" /> Board
+                <LayoutGrid className="w-3.5 h-3.5" /> Board
               </Button>
               <Button 
                 variant={view === "list" ? "default" : "ghost"} 
                 size="sm" 
-                className="rounded-lg gap-2 px-3 h-8 font-bold"
+                className="rounded-md gap-1.5 px-2.5 h-7 text-[10px] font-bold"
                 onClick={() => setView("list")}
               >
-                <List className="w-4 h-4" /> List
+                <List className="w-3.5 h-3.5" /> List
               </Button>
             </div>
           </div>
@@ -134,32 +136,32 @@ export default function Tasks() {
 
       <div className="flex-1 overflow-auto min-h-0">
         {view === "board" ? (
-          <div className="flex gap-4 md:gap-6 h-full min-w-max pb-4">
+          <div className="flex gap-3 md:gap-4 h-full min-w-max pb-3">
             {COLUMNS.map((step) => {
               const columnTasks = filteredTasks.filter(t => t.status === step);
               
               return (
                 <div 
                   key={step} 
-                  className="w-72 md:w-80 flex flex-col h-full bg-white/50 rounded-3xl border border-border/50 shadow-sm overflow-hidden"
+                  className="w-64 md:w-72 flex flex-col h-full bg-white/40 rounded-xl border border-border/40 shadow-sm overflow-hidden"
                   onDrop={(e) => handleDrop(e, step)}
                   onDragOver={handleDragOver}
                 >
-                  <div className="p-4 md:p-5 flex justify-between items-center bg-white/80 backdrop-blur-sm border-b border-border/30">
-                    <div className="flex items-center gap-3">
-                      <div className={`w-2 h-2 rounded-full ${
+                  <div className="p-3.5 flex justify-between items-center bg-white/70 backdrop-blur-sm border-b border-border/20">
+                    <div className="flex items-center gap-2">
+                      <div className={`w-1.5 h-1.5 rounded-full ${
                         step === 'Todo' ? 'bg-slate-400' : 
                         step === 'In Progress' ? 'bg-blue-400' : 
                         step === 'Review' ? 'bg-orange-400' : 'bg-green-400'
                       }`} />
-                      <span className="font-bold text-xs md:text-sm uppercase tracking-wider">{step}</span>
-                      <Badge variant="secondary" className="bg-primary/5 text-primary border-primary/10 px-2 py-0">
+                      <span className="font-bold text-[10px] uppercase tracking-widest">{step}</span>
+                      <Badge variant="secondary" className="bg-primary/5 text-primary border-primary/10 px-1.5 h-4 text-[9px]">
                         {columnTasks.length}
                       </Badge>
                     </div>
                   </div>
 
-                  <div className="flex-1 overflow-y-auto p-3 md:p-4 space-y-4 custom-scrollbar">
+                  <div className="flex-1 overflow-y-auto p-2.5 space-y-2.5 custom-scrollbar">
                     <AnimatePresence>
                       {columnTasks.map((task) => (
                         <div
@@ -172,8 +174,8 @@ export default function Tasks() {
                       ))}
                     </AnimatePresence>
                     {columnTasks.length === 0 && (
-                      <div className="h-24 flex flex-col items-center justify-center border-2 border-dashed border-border/30 rounded-2xl bg-white/20">
-                        <span className="text-xs text-muted-foreground font-medium">Empty</span>
+                      <div className="h-20 flex flex-col items-center justify-center border border-dashed border-border/20 rounded-lg bg-white/10">
+                        <span className="text-[9px] text-muted-foreground font-bold uppercase tracking-tighter">No items</span>
                       </div>
                     )}
                   </div>
@@ -182,29 +184,31 @@ export default function Tasks() {
             })}
           </div>
         ) : (
-          <div className="bg-white rounded-2xl md:rounded-3xl border border-border/50 shadow-sm overflow-x-auto">
+          <div className="bg-white rounded-xl border border-border/40 shadow-sm overflow-x-auto">
             <Table>
-              <TableHeader className="bg-secondary/20">
-                <TableRow className="border-b border-border/50">
-                  <TableHead className="font-bold uppercase tracking-wider text-[10px] py-4 px-4 md:px-6">Task</TableHead>
-                  <TableHead className="font-bold uppercase tracking-wider text-[10px]">Status</TableHead>
-                  <TableHead className="font-bold uppercase tracking-wider text-[10px] hidden sm:table-cell">Priority</TableHead>
-                  <TableHead className="font-bold uppercase tracking-wider text-[10px] text-right px-4 md:px-6">Due</TableHead>
+              <TableHeader className="bg-secondary/10">
+                <TableRow className="border-b border-border/20">
+                  <TableHead className="font-bold uppercase tracking-widest text-[9px] py-3 px-4">Task Details</TableHead>
+                  <TableHead className="font-bold uppercase tracking-widest text-[9px]">Status</TableHead>
+                  <TableHead className="font-bold uppercase tracking-widest text-[9px] hidden sm:table-cell">Priority</TableHead>
+                  <TableHead className="font-bold uppercase tracking-widest text-[9px] hidden md:table-cell">Category</TableHead>
+                  <TableHead className="font-bold uppercase tracking-widest text-[9px] text-right px-4">Due</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {filteredTasks.map((task) => (
-                  <TableRow key={task.id} className="hover:bg-primary/5 transition-colors border-b border-border/30">
-                    <TableCell className="py-4 px-4 md:px-6 font-bold text-foreground max-w-[200px] truncate">{task.title}</TableCell>
+                  <TableRow key={task.id} className="hover:bg-primary/5 transition-colors border-b border-border/10">
+                    <TableCell className="py-3 px-4 font-bold text-foreground text-[11px] max-w-[250px] truncate">{task.title}</TableCell>
                     <TableCell>
-                      <Badge variant="outline" className="font-bold text-[10px] uppercase">{task.status}</Badge>
+                      <Badge variant="outline" className="font-bold text-[9px] uppercase h-4 px-1.5">{task.status}</Badge>
                     </TableCell>
                     <TableCell className="hidden sm:table-cell">
-                      <Badge className={task.priority === "High" ? "bg-red-50 text-red-700" : "bg-green-50 text-green-700"}>
+                      <Badge className={cn("text-[9px] font-bold h-4 px-1.5", task.priority === "High" ? "bg-red-50 text-red-700" : "bg-green-50 text-green-700")}>
                         {task.priority}
                       </Badge>
                     </TableCell>
-                    <TableCell className="text-right px-4 md:px-6 text-xs font-bold text-muted-foreground">{task.dueDate}</TableCell>
+                    <TableCell className="hidden md:table-cell text-[10px] font-bold text-muted-foreground">{task.category}</TableCell>
+                    <TableCell className="text-right px-4 text-[10px] font-bold text-muted-foreground whitespace-nowrap">{task.dueDate}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
