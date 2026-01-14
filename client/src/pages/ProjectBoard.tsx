@@ -61,9 +61,7 @@ export default function ProjectBoard() {
   return (
     <div className="min-h-screen bg-background flex relative overflow-hidden">
       <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
-      <main className="flex-1 flex flex-col h-screen overflow-hidden lg:ml-72 transition-[margin] duration-300">
-        <Header onMenuClick={() => setIsSidebarOpen(true)} />
-        
+      <main className="flex-1 flex flex-col h-screen overflow-hidden transition-[margin] duration-300">        
         <header className="px-4 md:px-8 py-6 border-b border-border/50 bg-white/50 backdrop-blur-sm z-10">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 gap-4">
             <div className="flex items-center gap-4">

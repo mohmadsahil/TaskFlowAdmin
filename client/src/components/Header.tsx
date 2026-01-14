@@ -36,7 +36,7 @@ export function Header({ onMenuClick }: HeaderProps) {
         </div>
       </div>
 
-      <div className="flex items-center gap-2 md:gap-3">
+      <div className="flex items-center gap-2 md:gap-3 bg-white">
         <Popover>
           <PopoverTrigger asChild>
             <Button variant="ghost" size="icon" className="relative hover:bg-primary/5 rounded-xl">

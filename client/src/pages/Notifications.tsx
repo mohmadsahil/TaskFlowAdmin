@@ -17,8 +17,7 @@ export default function Notifications() {
   return (
     <div className="min-h-screen bg-background flex relative overflow-hidden">
       <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
-      <main className="flex-1 flex flex-col h-screen overflow-hidden lg:ml-72 transition-[margin] duration-300">
-        <Header onMenuClick={() => setIsSidebarOpen(true)} />
+      <main className="flex-1 flex flex-col h-screen overflow-hidden transition-[margin] duration-300">
         <div className="p-4 md:p-8 max-w-3xl mx-auto w-full overflow-auto">
           <div className="mb-10 flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
             <div>

@@ -32,8 +32,7 @@ export default function Roles() {
   return (
     <div className="min-h-screen bg-background flex relative overflow-hidden">
       <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
-      <main className="flex-1 flex flex-col h-screen overflow-hidden lg:ml-72 transition-[margin] duration-300">
-        <Header onMenuClick={() => setIsSidebarOpen(true)} />
+      <main className="flex-1 flex flex-col h-screen overflow-hidden transition-[margin] duration-300">
         <div className="p-4 md:p-8 max-w-7xl mx-auto w-full overflow-auto">
           <div className="mb-8">
             <h1 className="text-2xl md:text-3xl font-bold text-foreground">Roles & Permissions</h1>

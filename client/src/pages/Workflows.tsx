@@ -17,8 +17,7 @@ export default function Workflows() {
   return (
     <div className="min-h-screen bg-background flex relative overflow-hidden">
       <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
-      <main className="flex-1 flex flex-col h-screen overflow-hidden lg:ml-72 transition-[margin] duration-300">
-        <Header onMenuClick={() => setIsSidebarOpen(true)} />
+      <main className="flex-1 flex flex-col h-screen overflow-hidden transition-[margin] duration-300">
         <div className="p-4 md:p-8 max-w-7xl mx-auto w-full overflow-auto">
           <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
             <div>
