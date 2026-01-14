@@ -4,6 +4,7 @@ import { Toaster } from "@/components/ui/toaster";
 import Dashboard from "@/pages/Dashboard";
 import Projects from "@/pages/Projects";
 import ProjectBoard from "@/pages/ProjectBoard";
+import Tasks from "@/pages/Tasks";
 import Workflows from "@/pages/Workflows";
 import Settings from "@/pages/Settings";
 import Roles from "@/pages/Roles";
@@ -20,7 +21,7 @@ function Router() {
       <Route path="/workflows" component={Workflows} />
       <Route path="/roles" component={Roles} />
       <Route path="/notifications" component={Notifications} />
-      <Route path="/tasks" component={() => <Redirect to="/projects" />} />
+      <Route path="/tasks" component={Tasks} />
       <Route path="/settings" component={Settings} />
       <Route component={NotFound} />
     </Switch>
