@@ -55,7 +55,7 @@ export function Header({ onMenuClick }: HeaderProps) {
               </div>
             </div>
             <div className="p-3 bg-secondary/10 text-center">
-              <Button variant="link" size="sm" className="text-primary font-medium">View all</Button>
+              <Button variant="ghost" size="sm" className="text-primary font-bold h-8">View all notifications</Button>
             </div>
           </PopoverContent>
         </Popover>
